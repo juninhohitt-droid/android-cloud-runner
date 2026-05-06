@@ -1,0 +1,1402 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Guia Completo Detalhado - Android Cloud Runner</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .header {
+            text-align: center;
+            color: white;
+            margin-bottom: 40px;
+        }
+
+        .header h1 {
+            font-size: 36px;
+            margin-bottom: 10px;
+        }
+
+        .header p {
+            font-size: 16px;
+            opacity: 0.9;
+        }
+
+        .tabs {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 30px;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .tab-btn {
+            padding: 12px 24px;
+            border: none;
+            border-radius: 8px;
+            background: white;
+            color: #667eea;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 14px;
+        }
+
+        .tab-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+        }
+
+        .tab-btn.active {
+            background: #667eea;
+            color: white;
+        }
+
+        .content {
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            display: none;
+            max-height: 80vh;
+            overflow-y: auto;
+        }
+
+        .content.active {
+            display: block;
+            animation: fadeIn 0.3s ease;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .step {
+            margin-bottom: 40px;
+            padding-bottom: 40px;
+            border-bottom: 2px solid #f0f0f0;
+        }
+
+        .step:last-child {
+            border-bottom: none;
+            margin-bottom: 0;
+            padding-bottom: 0;
+        }
+
+        .step-header {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .step-number {
+            width: 50px;
+            height: 50px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            font-weight: bold;
+            flex-shrink: 0;
+        }
+
+        .step-title {
+            font-size: 22px;
+            font-weight: 600;
+            color: #333;
+        }
+
+        .step-content {
+            margin-left: 65px;
+            background: #f9f9f9;
+            padding: 20px;
+            border-radius: 12px;
+            border-left: 4px solid #667eea;
+        }
+
+        .step-content p {
+            color: #666;
+            line-height: 1.8;
+            margin-bottom: 12px;
+        }
+
+        .step-content p:last-child {
+            margin-bottom: 0;
+        }
+
+        .step-content li {
+            color: #666;
+            line-height: 1.8;
+            margin-bottom: 8px;
+            margin-left: 20px;
+        }
+
+        .code-block {
+            background: #2d2d2d;
+            color: #f8f8f2;
+            padding: 15px;
+            border-radius: 8px;
+            margin: 15px 0;
+            overflow-x: auto;
+            font-family: 'Courier New', monospace;
+            font-size: 13px;
+            line-height: 1.5;
+        }
+
+        .important {
+            background: #fff3cd;
+            border-left: 4px solid #ffc107;
+            padding: 15px;
+            border-radius: 8px;
+            margin: 15px 0;
+            color: #856404;
+        }
+
+        .success {
+            background: #d4edda;
+            border-left: 4px solid #28a745;
+            padding: 15px;
+            border-radius: 8px;
+            margin: 15px 0;
+            color: #155724;
+        }
+
+        .info {
+            background: #d1ecf1;
+            border-left: 4px solid #17a2b8;
+            padding: 15px;
+            border-radius: 8px;
+            margin: 15px 0;
+            color: #0c5460;
+        }
+
+        .checklist {
+            background: #f0f0f0;
+            padding: 20px;
+            border-radius: 12px;
+            margin-top: 30px;
+        }
+
+        .checklist h3 {
+            margin-bottom: 15px;
+            color: #333;
+        }
+
+        .checklist-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 10px;
+            cursor: pointer;
+            padding: 8px;
+            border-radius: 6px;
+            transition: background 0.2s ease;
+        }
+
+        .checklist-item:hover {
+            background: #e0e0e0;
+        }
+
+        .checklist-item input[type="checkbox"] {
+            width: 18px;
+            height: 18px;
+            cursor: pointer;
+        }
+
+        .checklist-item label {
+            cursor: pointer;
+            flex: 1;
+            color: #666;
+        }
+
+        .checklist-item input[type="checkbox"]:checked + label {
+            color: #28a745;
+            text-decoration: line-through;
+        }
+
+        .nav-buttons {
+            display: flex;
+            gap: 15px;
+            margin-top: 40px;
+            justify-content: center;
+        }
+
+        button.nav-btn {
+            padding: 12px 30px;
+            border: none;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 14px;
+        }
+
+        button.prev {
+            background: #e0e0e0;
+            color: #333;
+        }
+
+        button.prev:hover:not(:disabled) {
+            background: #d0d0d0;
+        }
+
+        button.next {
+            background: #667eea;
+            color: white;
+        }
+
+        button.next:hover:not(:disabled) {
+            background: #5568d3;
+            transform: translateY(-2px);
+        }
+
+        button:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .footer {
+            text-align: center;
+            color: white;
+            margin-top: 40px;
+            font-size: 14px;
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 6px;
+            background: rgba(255, 255, 255, 0.3);
+            border-radius: 3px;
+            margin-bottom: 20px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: white;
+            width: 0%;
+            transition: width 0.3s ease;
+        }
+
+        .expandable {
+            background: #f5f5f5;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            margin: 15px 0;
+            overflow: hidden;
+        }
+
+        .expandable-header {
+            padding: 15px;
+            cursor: pointer;
+            font-weight: 600;
+            color: #333;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: #f9f9f9;
+            transition: background 0.2s ease;
+        }
+
+        .expandable-header:hover {
+            background: #f0f0f0;
+        }
+
+        .expandable-content {
+            padding: 15px;
+            display: none;
+            background: white;
+        }
+
+        .expandable-content.active {
+            display: block;
+        }
+
+        .expandable-icon {
+            transition: transform 0.3s ease;
+        }
+
+        .expandable-icon.active {
+            transform: rotate(180deg);
+        }
+
+        @media (max-width: 768px) {
+            .header h1 {
+                font-size: 24px;
+            }
+
+            .content {
+                padding: 20px;
+                max-height: 70vh;
+            }
+
+            .step-header {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            .step-content {
+                margin-left: 0;
+            }
+
+            .tabs {
+                flex-direction: column;
+            }
+
+            .tab-btn {
+                width: 100%;
+            }
+        }
+
+        .section-title {
+            font-size: 20px;
+            font-weight: 600;
+            color: #333;
+            margin-top: 30px;
+            margin-bottom: 15px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #667eea;
+        }
+
+        .time-estimate {
+            background: #e3f2fd;
+            border-left: 4px solid #2196f3;
+            padding: 12px;
+            border-radius: 6px;
+            margin: 15px 0;
+            color: #1565c0;
+            font-size: 14px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="progress-bar">
+            <div class="progress-fill" id="progressFill"></div>
+        </div>
+
+        <div class="header">
+            <h1>📱 Guia Completo e Detalhado</h1>
+            <p>Android Studio + Android Cloud Runner - Passo a Passo Interativo</p>
+        </div>
+
+        <div class="tabs">
+            <button class="tab-btn active" onclick="switchTab(0)">📋 Visão Geral</button>
+            <button class="tab-btn" onclick="switchTab(1)">🛠️ Android Studio</button>
+            <button class="tab-btn" onclick="switchTab(2)">🚀 Android Cloud Runner</button>
+            <button class="tab-btn" onclick="switchTab(3)">☁️ Deploy (Railway)</button>
+        </div>
+
+        <!-- TAB 0: Visão Geral -->
+        <div class="content active" id="tab0">
+            <h2>📋 Visão Geral Completa</h2>
+
+            <div class="step">
+                <div class="step-header">
+                    <div class="step-number">?</div>
+                    <div class="step-title">O que você vai aprender</div>
+                </div>
+                <div class="step-content">
+                    <p><strong>Neste guia, você aprenderá:</strong></p>
+                    <ul>
+                        <li>Como instalar Android Studio (IDE oficial do Android)</li>
+                        <li>Como criar um emulador Android (celular virtual)</li>
+                        <li>Como usar Android Cloud Runner (interface web)</li>
+                        <li>Como fazer upload e instalar APKs</li>
+                        <li>Como testar seus apps</li>
+                        <li>Como acessar remotamente via Railway (nuvem)</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="step">
+                <div class="step-header">
+                    <div class="step-number">⏱️</div>
+                    <div class="step-title">Tempo Estimado</div>
+                </div>
+                <div class="step-content">
+                    <div class="time-estimate">
+                        <strong>Primeira vez:</strong> 60-90 minutos<br>
+                        - Android Studio: 30-45 min<br>
+                        - Emulador: 15-30 min<br>
+                        - Android Cloud Runner: 5-10 min
+                    </div>
+                    <div class="time-estimate">
+                        <strong>Próximas vezes:</strong> 5-10 minutos<br>
+                        - Apenas executar START_PYTHON39.bat
+                    </div>
+                </div>
+            </div>
+
+            <div class="step">
+                <div class="step-header">
+                    <div class="step-number">🎯</div>
+                    <div class="step-title">Fluxo Completo</div>
+                </div>
+                <div class="step-content">
+                    <p><strong>Este é o fluxo que você vai seguir:</strong></p>
+                    <div class="code-block">1. Instalar Android Studio
+   ↓
+2. Criar emulador Android
+   ↓
+3. Iniciar emulador
+   ↓
+4. Executar Android Cloud Runner
+   ↓
+5. Fazer upload de APK
+   ↓
+6. Instalar APK
+   ↓
+7. Testar seu app
+   ↓
+8. (Opcional) Deploy na nuvem (Railway)</div>
+                </div>
+            </div>
+
+            <div class="step">
+                <div class="step-header">
+                    <div class="step-number">✨</div>
+                    <div class="step-title">Pré-requisitos</div>
+                </div>
+                <div class="step-content">
+                    <p><strong>Você precisa ter:</strong></p>
+                    <ul>
+                        <li>✅ Windows 10 ou superior (ou Mac/Linux)</li>
+                        <li>✅ Python 3.9 instalado</li>
+                        <li>✅ 10 GB de espaço em disco livre</li>
+                        <li>✅ 4 GB de RAM (8 GB recomendado)</li>
+                        <li>✅ Conexão com internet</li>
+                        <li>✅ Um arquivo APK para testar</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="step">
+                <div class="step-header">
+                    <div class="step-number">🚀</div>
+                    <div class="step-title">Próximos Passos</div>
+                </div>
+                <div class="step-content">
+                    <p>Clique em <strong>"Próximo →"</strong> para começar com <strong>Android Studio</strong>!</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- TAB 1: Android Studio -->
+        <div class="content" id="tab1">
+            <h2>🛠️ Android Studio - Guia Completo</h2>
+
+            <div class="step">
+                <div class="step-header">
+                    <div class="step-number">1</div>
+                    <div class="step-title">Baixar Android Studio</div>
+                </div>
+                <div class="step-content">
+                    <p><strong>Passo 1.1: Abrir o site oficial</strong></p>
+                    <ul>
+                        <li>Abra seu navegador (Chrome, Firefox, Edge, etc.)</li>
+                        <li>Digite na barra de endereço: <code>https://developer.android.com/studio</code></li>
+                        <li>Pressione Enter</li>
+                    </ul>
+
+                    <p style="margin-top: 15px;"><strong>Passo 1.2: Clicar em Download</strong></p>
+                    <ul>
+                        <li>Você verá um botão grande azul: <strong>"Download Android Studio"</strong></li>
+                        <li>Clique nele</li>
+                    </ul>
+
+                    <p style="margin-top: 15px;"><strong>Passo 1.3: Aceitar termos</strong></p>
+                    <ul>
+                        <li>Aparecerá uma página com termos de serviço</li>
+                        <li>Marque a caixa: <strong>"I have read and agree..."</strong></li>
+                        <li>Clique em <strong>"Download Android Studio"</strong></li>
+                    </ul>
+
+                    <div class="time-estimate">
+                        ⏱️ Tempo: 5-15 minutos (depende da velocidade de internet)<br>
+                        Tamanho: ~2 GB
+                    </div>
+                </div>
+            </div>
+
+            <div class="step">
+                <div class="step-header">
+                    <div class="step-number">2</div>
+                    <div class="step-title">Instalar Android Studio</div>
+                </div>
+                <div class="step-content">
+                    <p><strong>Passo 2.1: Localizar o arquivo</strong></p>
+                    <ul>
+                        <li>Abra a pasta <strong>Downloads</strong></li>
+                        <li>Procure por: <code>android-studio-XXXX.exe</code></li>
+                    </ul>
+
+                    <p style="margin-top: 15px;"><strong>Passo 2.2: Executar instalador</strong></p>
+                    <ul>
+                        <li>Duplo clique no arquivo</li>
+                        <li>Se aparecer pergunta: <strong>"Do you want to allow..."</strong>, clique <strong>"Yes"</strong></li>
+                    </ul>
+
+                    <p style="margin-top: 15px;"><strong>Passo 2.3: Seguir o assistente</strong></p>
+                    <ul>
+                        <li>Clique <strong>"Next"</strong> na primeira tela</li>
+                        <li>Selecione <strong>"Standard"</strong> em "Install Type"</li>
+                        <li>Clique <strong>"Next"</strong></li>
+                        <li>Deixe as pastas padrão e clique <strong>"Next"</strong></li>
+                        <li>Clique <strong>"Install"</strong></li>
+                    </ul>
+
+                    <div class="important">
+                        ⚠️ <strong>IMPORTANTE:</strong> Não feche a janela durante a instalação!<br>
+                        Isso pode levar 10-20 minutos.
+                    </div>
+
+                    <p style="margin-top: 15px;"><strong>Passo 2.4: Finalizar</strong></p>
+                    <ul>
+                        <li>Quando terminar, clique <strong>"Finish"</strong></li>
+                    </ul>
+
+                    <div class="time-estimate">
+                        ⏱️ Tempo: 15-30 minutos
+                    </div>
+                </div>
+            </div>
+
+            <div class="step">
+                <div class="step-header">
+                    <div class="step-number">3</div>
+                    <div class="step-title">Primeira Execução</div>
+                </div>
+                <div class="step-content">
+                    <p><strong>Passo 3.1: Android Studio vai abrir</strong></p>
+                    <ul>
+                        <li>Após clicar em "Finish", Android Studio abrirá</li>
+                        <li>Isso pode levar alguns minutos</li>
+                    </ul>
+
+                    <p style="margin-top: 15px;"><strong>Passo 3.2: Tela de Boas-vindas</strong></p>
+                    <ul>
+                        <li>Você verá a tela inicial com opções</li>
+                        <li>Clique em <strong>"New Project"</strong> (ou qualquer opção)</li>
+                    </ul>
+
+                    <p style="margin-top: 15px;"><strong>Passo 3.3: Baixar componentes</strong></p>
+                    <ul>
+                        <li>Android Studio vai baixar componentes necessários</li>
+                        <li>Você verá mensagens como "Downloading SDK..."</li>
+                        <li>Aguarde até terminar (5-10 minutos)</li>
+                    </ul>
+
+                    <div class="success">
+                        ✓ Quando terminar, você verá a tela principal do Android Studio
+                    </div>
+
+                    <div class="time-estimate">
+                        ⏱️ Tempo: 10-20 minutos
+                    </div>
+                </div>
+            </div>
+
+            <div class="step">
+                <div class="step-header">
+                    <div class="step-number">4</div>
+                    <div class="step-title">Criar Emulador Android</div>
+                </div>
+                <div class="step-content">
+                    <p><strong>Passo 4.1: Abrir Device Manager</strong></p>
+                    <ul>
+                        <li>No Android Studio, clique no menu <strong>"Tools"</strong></li>
+                        <li>Procure por <strong>"Device Manager"</strong></li>
+                        <li>Clique nele</li>
+                    </ul>
+
+                    <p style="margin-top: 15px;"><strong>Passo 4.2: Criar novo dispositivo</strong></p>
+                    <ul>
+                        <li>Você verá a janela "Device Manager"</li>
+                        <li>Clique em <strong>"Create device"</strong> (ou "Create Virtual Device")</li>
+                    </ul>
+
+                    <p style="margin-top: 15px;"><strong>Passo 4.3: Escolher modelo</strong></p>
+                    <ul>
+                        <li>Aparecerá uma lista de modelos de telefones</li>
+                        <li>Selecione <strong>"Pixel 5"</strong> (recomendado)</li>
+                        <li>Clique em <strong>"Next"</strong></li>
+                    </ul>
+
+                    <p style="margin-top: 15px;"><strong>Passo 4.4: Escolher versão do Android</strong></p>
+                    <ul>
+                        <li>Aparecerá uma lista de versões do Android</li>
+                        <li>Selecione <strong>"Android 13"</strong> (ou mais recente)</li>
+                        <li>Se aparecer botão "Download", clique para baixar</li>
+                        <li>Clique em <strong>"Next"</strong></li>
+                    </ul>
+
+                    <p style="margin-top: 15px;"><strong>Passo 4.5: Verificar configurações</strong></p>
+                    <ul>
+                        <li>Você verá um resumo das configurações</li>
+                        <li>Deixe tudo como está</li>
+                        <li>Clique em <strong>"Finish"</strong></li>
+                    </ul>
+
+                    <div class="success">
+                        ✓ Emulador criado com sucesso!
+                    </div>
+
+                    <div class="time-estimate">
+                        ⏱️ Tempo: 10-30 minutos (depende do download)
+                    </div>
+                </div>
+            </div>
+
+            <div class="step">
+                <div class="step-header">
+                    <div class="step-number">5</div>
+                    <div class="step-title">Iniciar o Emulador</div>
+                </div>
+                <div class="step-content">
+                    <p><strong>Passo 5.1: Abrir Device Manager</strong></p>
+                    <ul>
+                        <li>No Android Studio, vá para <strong>Tools → Device Manager</strong></li>
+                    </ul>
+
+                    <p style="margin-top: 15px;"><strong>Passo 5.2: Iniciar emulador</strong></p>
+                    <ul>
+                        <li>Você verá o emulador na lista (ex: "Pixel 5")</li>
+                        <li>Clique no botão de <strong>"Play"</strong> (triângulo verde)</li>
+                    </ul>
+
+                    <p style="margin-top: 15px;"><strong>Passo 5.3: Aguardar inicialização</strong></p>
+                    <ul>
+                        <li>Uma janela vai abrir mostrando o emulador iniciando</li>
+                        <li>Você verá a tela preta do Android iniciando</li>
+                        <li>Aguarde 2-5 minutos</li>
+                    </ul>
+
+                    <div class="success">
+                        ✓ Quando terminar, você verá a tela inicial do Android com relógio, data e ícones de apps
+                    </div>
+
+                    <div class="time-estimate">
+                        ⏱️ Tempo: 2-5 minutos
+                    </div>
+                </div>
+            </div>
+
+            <div class="step">
+                <div class="step-header">
+                    <div class="step-number">6</div>
+                    <div class="step-title">Configurações Importantes</div>
+                </div>
+                <div class="step-content">
+                    <p><strong>Aumentar Performance (Opcional)</strong></p>
+                    <ul>
+                        <li>Se o emulador estiver lento, você pode aumentar a RAM</li>
+                        <li>No Device Manager, clique em "Edit" (lápis)</li>
+                        <li>Procure por "RAM" e aumente para 4 GB</li>
+                        <li>Clique em "Finish"</li>
+                    </ul>
+
+                    <p style="margin-top: 15px;"><strong>Ativar Modo Desenvolvedor</strong></p>
+                    <ul>
+                        <li>Dentro do emulador, abra Configurações</li>
+                        <li>Procure por "Sobre o telefone"</li>
+                        <li>Clique 7 vezes em "Número da compilação"</li>
+                        <li>Mensagem: "Você agora é um desenvolvedor!"</li>
+                    </ul>
+
+                    <div class="info">
+                        ℹ️ Isso permite instalar APKs de fontes desconhecidas
+                    </div>
+                </div>
+            </div>
+
+            <div class="checklist">
+                <h3>✅ Checklist - Android Studio</h3>
+                <div class="checklist-item">
+                    <input type="checkbox" id="as1">
+                    <label for="as1">Android Studio baixado (2 GB)</label>
+                </div>
+                <div class="checklist-item">
+                    <input type="checkbox" id="as2">
+                    <label for="as2">Android Studio instalado</label>
+                </div>
+                <div class="checklist-item">
+                    <input type="checkbox" id="as3">
+                    <label for="as3">Android Studio aberto pela primeira vez</label>
+                </div>
+                <div class="checklist-item">
+                    <input type="checkbox" id="as4">
+                    <label for="as4">Device Manager acessado</label>
+                </div>
+                <div class="checklist-item">
+                    <input type="checkbox" id="as5">
+                    <label for="as5">Emulador criado (Pixel 5 + Android 13)</label>
+                </div>
+                <div class="checklist-item">
+                    <input type="checkbox" id="as6">
+                    <label for="as6">Emulador iniciado com sucesso</label>
+                </div>
+                <div class="checklist-item">
+                    <input type="checkbox" id="as7">
+                    <label for="as7">Tela inicial do Android visível</label>
+                </div>
+                <div class="checklist-item">
+                    <input type="checkbox" id="as8">
+                    <label for="as8">Modo desenvolvedor ativado</label>
+                </div>
+            </div>
+        </div>
+
+        <!-- TAB 2: Android Cloud Runner -->
+        <div class="content" id="tab2">
+            <h2>🚀 Android Cloud Runner - Guia Completo</h2>
+
+            <div class="step">
+                <div class="step-header">
+                    <div class="step-number">1</div>
+                    <div class="step-title">Preparar o Emulador</div>
+                </div>
+                <div class="step-content">
+                    <p><strong>Passo 1.1: Verificar se emulador está rodando</strong></p>
+                    <ul>
+                        <li>Abra Android Studio</li>
+                        <li>Vá para <strong>Tools → Device Manager</strong></li>
+                        <li>Procure pelo seu emulador (ex: "Pixel 5")</li>
+                        <li>Se houver ícone "Play", clique para iniciar</li>
+                        <li>Aguarde 2-5 minutos</li>
+                    </ul>
+
+                    <div class="important">
+                        ⚠️ <strong>IMPORTANTE:</strong> Deixe o emulador aberto enquanto usa Android Cloud Runner!<br>
+                        Não feche a janela do Android Studio.
+                    </div>
+                </div>
+            </div>
+
+            <div class="step">
+                <div class="step-header">
+                    <div class="step-number">2</div>
+                    <div class="step-title">Executar Android Cloud Runner</div>
+                </div>
+                <div class="step-content">
+                    <p><strong>Passo 2.1: Abrir a pasta do projeto</strong></p>
+                    <ul>
+                        <li>Localize a pasta <strong>android-cloud-runner-portable</strong></li>
+                        <li>Abra a pasta</li>
+                    </ul>
+
+                    <p style="margin-top: 15px;"><strong>Passo 2.2: Abrir PowerShell</strong></p>
+                    <ul>
+                        <li>Clique direito em um espaço vazio da pasta</li>
+                        <li>Selecione <strong>"Open PowerShell here"</strong></li>
+                        <li>Uma janela preta vai abrir</li>
+                    </ul>
+
+                    <p style="margin-top: 15px;"><strong>Passo 2.3: Executar o script</strong></p>
+                    <ul>
+                        <li>Na janela do PowerShell, digite:</li>
+                    </ul>
+                    <div class="code-block">START_PYTHON39.bat</div>
+                    <ul>
+                        <li>Pressione Enter</li>
+                    </ul>
+
+                    <p style="margin-top: 15px;"><strong>Passo 2.4: Aguardar inicialização</strong></p>
+                    <ul>
+                        <li>Você verá mensagens como:</li>
+                    </ul>
+                    <div class="code-block">[OK] Python encontrado
+[OK] pip encontrado
+[*] Instalando dependencias...
+[OK] Dependencias instaladas
+[*] Iniciando Android Cloud Runner...</div>
+
+                    <div class="success">
+                        ✓ Quando ver: "📱 Acesse: http://localhost:5000"<br>
+                        Significa que está pronto!
+                    </div>
+
+                    <div class="important">
+                        ⚠️ Não feche esta janela! Ela precisa ficar aberta.
+                    </div>
+
+                    <div class="time-estimate">
+                        ⏱️ Tempo: 2-5 minutos
+                    </div>
+                </div>
+            </div>
+
+            <div class="step">
+                <div class="step-header">
+                    <div class="step-number">3</div>
+                    <div class="step-title">Acessar a Interface Web</div>
+                </div>
+                <div class="step-content">
+                    <p><strong>Passo 3.1: Abrir o navegador</strong></p>
+                    <ul>
+                        <li>Abra Chrome, Firefox, Edge ou Safari</li>
+                    </ul>
+
+                    <p style="margin-top: 15px;"><strong>Passo 3.2: Digitar URL</strong></p>
+                    <ul>
+                        <li>Na barra de endereço, digite:</li>
+                    </ul>
+                    <div class="code-block">http://localhost:5000</div>
+                    <ul>
+                        <li>Pressione Enter</li>
+                    </ul>
+
+                    <div class="success">
+                        ✓ A página vai carregar com a interface do Android Cloud Runner
+                    </div>
+
+                    <div class="time-estimate">
+                        ⏱️ Tempo: 5 segundos
+                    </div>
+                </div>
+            </div>
+
+            <div class="step">
+                <div class="step-header">
+                    <div class="step-number">4</div>
+                    <div class="step-title">Fazer Upload de um APK</div>
+                </div>
+                <div class="step-content">
+                    <p><strong>Passo 4.1: Preparar o arquivo APK</strong></p>
+                    <ul>
+                        <li>Você precisa ter um arquivo <code>.apk</code> no seu computador</li>
+                        <li>Pode ser um app que você desenvolveu ou um app da internet</li>
+                    </ul>
+
+                    <p style="margin-top: 15px;"><strong>Passo 4.2: Método 1 - Arrastar e Soltar</strong></p>
+                    <ul>
+                        <li>Localize o arquivo <code>.apk</code> no seu computador</li>
+                        <li>Na interface, procure pela área que diz: "Arrastar APK aqui"</li>
+                        <li>Arraste o arquivo e solte nessa área</li>
+                        <li>O upload vai começar</li>
+                    </ul>
+
+                    <p style="margin-top: 15px;"><strong>Passo 4.3: Método 2 - Clique para Selecionar</strong></p>
+                    <ul>
+                        <li>Clique na área de upload</li>
+                        <li>Uma janela vai abrir</li>
+                        <li>Navegue até seu arquivo <code>.apk</code></li>
+                        <li>Clique em "Abrir"</li>
+                    </ul>
+
+                    <p style="margin-top: 15px;"><strong>Passo 4.4: Acompanhar upload</strong></p>
+                    <ul>
+                        <li>Você verá uma barra de progresso</li>
+                        <li>Mensagens como "Uploading..."</li>
+                        <li>Quando terminar: "Upload concluído!"</li>
+                    </ul>
+
+                    <div class="time-estimate">
+                        ⏱️ Tempo: 30 segundos a 2 minutos (depende do tamanho)
+                    </div>
+                </div>
+            </div>
+
+            <div class="step">
+                <div class="step-header">
+                    <div class="step-number">5</div>
+                    <div class="step-title">Instalar o APK</div>
+                </div>
+                <div class="step-content">
+                    <p><strong>Passo 5.1: Após upload</strong></p>
+                    <ul>
+                        <li>O arquivo aparecerá na lista</li>
+                        <li>Você verá um botão <strong>"Instalar"</strong></li>
+                    </ul>
+
+                    <p style="margin-top: 15px;"><strong>Passo 5.2: Clicar em Instalar</strong></p>
+                    <ul>
+                        <li>Clique no botão <strong>"Instalar"</strong></li>
+                        <li>Você verá: "Instalando... Por favor aguarde"</li>
+                    </ul>
+
+                    <p style="margin-top: 15px;"><strong>Passo 5.3: Acompanhar instalação</strong></p>
+                    <ul>
+                        <li>Apps pequenos: 10-30 segundos</li>
+                        <li>Apps médios: 1-3 minutos</li>
+                        <li>Apps grandes: 5+ minutos</li>
+                    </ul>
+
+                    <div class="success">
+                        ✓ Quando terminar: "APK instalado com sucesso!"
+                    </div>
+
+                    <p style="margin-top: 15px;"><strong>Passo 5.4: Verificar no emulador</strong></p>
+                    <ul>
+                        <li>Olhe para a janela do Android Studio</li>
+                        <li>Você pode ver a tela de instalação</li>
+                        <li>Quando terminar, o app está pronto!</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="step">
+                <div class="step-header">
+                    <div class="step-number">6</div>
+                    <div class="step-title">Abrir o App</div>
+                </div>
+                <div class="step-content">
+                    <p><strong>Passo 6.1: Usar o botão "Abrir"</strong></p>
+                    <ul>
+                        <li>Na interface, procure pelo app na lista</li>
+                        <li>Clique no botão <strong>"Abrir"</strong></li>
+                        <li>O app vai abrir no emulador automaticamente</li>
+                    </ul>
+
+                    <p style="margin-top: 15px;"><strong>Passo 6.2: Abrir manualmente</strong></p>
+                    <ul>
+                        <li>Se o botão não funcionar, abra manualmente:</li>
+                        <li>Olhe para a janela do emulador</li>
+                        <li>Procure pela <strong>Gaveta de Apps</strong> (ícone de grade)</li>
+                        <li>Clique nela</li>
+                        <li>Procure pelo seu app</li>
+                        <li>Clique para abrir</li>
+                    </ul>
+
+                    <div class="success">
+                        ✓ Seu app está rodando no emulador!<br>
+                        Agora você pode testar todas as funcionalidades.
+                    </div>
+                </div>
+            </div>
+
+            <div class="step">
+                <div class="step-header">
+                    <div class="step-number">7</div>
+                    <div class="step-title">Acessar Android via VNC</div>
+                </div>
+                <div class="step-content">
+                    <p><strong>O que é VNC?</strong></p>
+                    <p>VNC permite você <strong>ver e controlar</strong> o Android através do navegador, sem precisar da janela do Android Studio.</p>
+
+                    <p style="margin-top: 15px;"><strong>Passo 7.1: Abrir VNC</strong></p>
+                    <ul>
+                        <li>Na interface do Android Cloud Runner, procure por:</li>
+                        <li>Um botão <strong>"Abrir VNC"</strong> ou <strong>"View Android"</strong></li>
+                        <li>Ou um link: <strong>"http://localhost:6080"</strong></li>
+                        <li>Clique nele</li>
+                    </ul>
+
+                    <p style="margin-top: 15px;"><strong>Passo 7.2: Você verá o Android no navegador</strong></p>
+                    <ul>
+                        <li>Uma nova aba vai abrir</li>
+                        <li>Você verá a tela do Android</li>
+                        <li>Pode clicar, digitar, arrastar, etc.</li>
+                    </ul>
+
+                    <div class="info">
+                        ℹ️ Isso é útil para ver o Android sem a janela do Android Studio
+                    </div>
+                </div>
+            </div>
+
+            <div class="checklist">
+                <h3>✅ Checklist - Android Cloud Runner</h3>
+                <div class="checklist-item">
+                    <input type="checkbox" id="acr1">
+                    <label for="acr1">Emulador rodando</label>
+                </div>
+                <div class="checklist-item">
+                    <input type="checkbox" id="acr2">
+                    <label for="acr2">START_PYTHON39.bat executado</label>
+                </div>
+                <div class="checklist-item">
+                    <input type="checkbox" id="acr3">
+                    <label for="acr3">Interface web carregada (http://localhost:5000)</label>
+                </div>
+                <div class="checklist-item">
+                    <input type="checkbox" id="acr4">
+                    <label for="acr4">APK preparado</label>
+                </div>
+                <div class="checklist-item">
+                    <input type="checkbox" id="acr5">
+                    <label for="acr5">APK enviado (upload)</label>
+                </div>
+                <div class="checklist-item">
+                    <input type="checkbox" id="acr6">
+                    <label for="acr6">APK instalado</label>
+                </div>
+                <div class="checklist-item">
+                    <input type="checkbox" id="acr7">
+                    <label for="acr7">App aberto no emulador</label>
+                </div>
+                <div class="checklist-item">
+                    <input type="checkbox" id="acr8">
+                    <label for="acr8">Funcionalidades testadas</label>
+                </div>
+                <div class="checklist-item">
+                    <input type="checkbox" id="acr9">
+                    <label for="acr9">VNC acessado</label>
+                </div>
+            </div>
+        </div>
+
+        <!-- TAB 3: Railway -->
+        <div class="content" id="tab3">
+            <h2>☁️ Deploy na Nuvem (Railway)</h2>
+
+            <div class="step">
+                <div class="step-header">
+                    <div class="step-number">1</div>
+                    <div class="step-title">Criar Conta GitHub</div>
+                </div>
+                <div class="step-content">
+                    <p><strong>Passo 1.1: Abrir GitHub</strong></p>
+                    <ul>
+                        <li>Abra seu navegador</li>
+                        <li>Digite: <code>https://github.com/signup</code></li>
+                        <li>Pressione Enter</li>
+                    </ul>
+
+                    <p style="margin-top: 15px;"><strong>Passo 1.2: Preencher dados</strong></p>
+                    <ul>
+                        <li>Email: seu email</li>
+                        <li>Password: sua senha</li>
+                        <li>Username: seu nome de usuário</li>
+                    </ul>
+
+                    <p style="margin-top: 15px;"><strong>Passo 1.3: Confirmar email</strong></p>
+                    <ul>
+                        <li>GitHub vai enviar um email de confirmação</li>
+                        <li>Abra seu email e clique no link</li>
+                    </ul>
+
+                    <div class="time-estimate">
+                        ⏱️ Tempo: 5 minutos
+                    </div>
+                </div>
+            </div>
+
+            <div class="step">
+                <div class="step-header">
+                    <div class="step-number">2</div>
+                    <div class="step-title">Criar Repositório</div>
+                </div>
+                <div class="step-content">
+                    <p><strong>Passo 2.1: Fazer login</strong></p>
+                    <ul>
+                        <li>Faça login em https://github.com</li>
+                    </ul>
+
+                    <p style="margin-top: 15px;"><strong>Passo 2.2: Novo repositório</strong></p>
+                    <ul>
+                        <li>Clique no ícone <strong>"+"</strong> no canto superior direito</li>
+                        <li>Selecione <strong>"New repository"</strong></li>
+                    </ul>
+
+                    <p style="margin-top: 15px;"><strong>Passo 2.3: Preencher dados</strong></p>
+                    <ul>
+                        <li>Repository name: <code>android-cloud-runner</code></li>
+                        <li>Description: <code>Android Cloud Runner - Portátil</code></li>
+                        <li>Selecione <strong>"Public"</strong></li>
+                    </ul>
+
+                    <p style="margin-top: 15px;"><strong>Passo 2.4: Criar</strong></p>
+                    <ul>
+                        <li>Clique em <strong>"Create repository"</strong></li>
+                    </ul>
+
+                    <div class="time-estimate">
+                        ⏱️ Tempo: 3 minutos
+                    </div>
+                </div>
+            </div>
+
+            <div class="step">
+                <div class="step-header">
+                    <div class="step-number">3</div>
+                    <div class="step-title">Fazer Upload para GitHub</div>
+                </div>
+                <div class="step-content">
+                    <p><strong>Passo 3.1: Abrir PowerShell</strong></p>
+                    <ul>
+                        <li>Na pasta <code>android-cloud-runner-portable</code></li>
+                        <li>Clique direito e selecione <strong>"Open PowerShell here"</strong></li>
+                    </ul>
+
+                    <p style="margin-top: 15px;"><strong>Passo 3.2: Executar comandos</strong></p>
+                    <ul>
+                        <li>Digite os comandos abaixo (um por um):</li>
+                    </ul>
+                    <div class="code-block">git init
+git add .
+git commit -m "Initial commit"
+git remote add origin https://github.com/SEU_USERNAME/android-cloud-runner.git
+git branch -M main
+git push -u origin main</div>
+
+                    <p style="margin-top: 15px;"><strong>Substituir SEU_USERNAME pelo seu nome de usuário do GitHub</strong></p>
+
+                    <div class="time-estimate">
+                        ⏱️ Tempo: 5 minutos
+                    </div>
+                </div>
+            </div>
+
+            <div class="step">
+                <div class="step-header">
+                    <div class="step-number">4</div>
+                    <div class="step-title">Criar Conta Railway</div>
+                </div>
+                <div class="step-content">
+                    <p><strong>Passo 4.1: Abrir Railway</strong></p>
+                    <ul>
+                        <li>Abra seu navegador</li>
+                        <li>Digite: <code>https://railway.app</code></li>
+                        <li>Pressione Enter</li>
+                    </ul>
+
+                    <p style="margin-top: 15px;"><strong>Passo 4.2: Fazer login com GitHub</strong></p>
+                    <ul>
+                        <li>Clique em <strong>"Login"</strong></li>
+                        <li>Selecione <strong>"Login with GitHub"</strong></li>
+                        <li>Autorize Railway a acessar sua conta</li>
+                    </ul>
+
+                    <div class="time-estimate">
+                        ⏱️ Tempo: 3 minutos
+                    </div>
+                </div>
+            </div>
+
+            <div class="step">
+                <div class="step-header">
+                    <div class="step-number">5</div>
+                    <div class="step-title">Fazer Deploy</div>
+                </div>
+                <div class="step-content">
+                    <p><strong>Passo 5.1: Novo projeto</strong></p>
+                    <ul>
+                        <li>No painel do Railway, clique em <strong>"New Project"</strong></li>
+                    </ul>
+
+                    <p style="margin-top: 15px;"><strong>Passo 5.2: Deploy do GitHub</strong></p>
+                    <ul>
+                        <li>Selecione <strong>"Deploy from GitHub repo"</strong></li>
+                        <li>Procure por <code>android-cloud-runner</code></li>
+                        <li>Clique para selecionar</li>
+                    </ul>
+
+                    <p style="margin-top: 15px;"><strong>Passo 5.3: Aguardar deploy</strong></p>
+                    <ul>
+                        <li>Railway vai começar o deploy automaticamente</li>
+                        <li>Você verá mensagens de progresso</li>
+                        <li>Aguarde 3-5 minutos</li>
+                    </ul>
+
+                    <div class="success">
+                        ✓ Quando terminar, você verá "Deployment successful"
+                    </div>
+
+                    <div class="time-estimate">
+                        ⏱️ Tempo: 5-10 minutos
+                    </div>
+                </div>
+            </div>
+
+            <div class="step">
+                <div class="step-header">
+                    <div class="step-number">6</div>
+                    <div class="step-title">Obter URL Pública</div>
+                </div>
+                <div class="step-content">
+                    <p><strong>Passo 6.1: Acessar Settings</strong></p>
+                    <ul>
+                        <li>No painel do Railway, vá para seu projeto</li>
+                        <li>Clique em <strong>"Settings"</strong> (ícone de engrenagem)</li>
+                    </ul>
+
+                    <p style="margin-top: 15px;"><strong>Passo 6.2: Procurar Domains</strong></p>
+                    <ul>
+                        <li>Procure por <strong>"Domains"</strong></li>
+                        <li>Você verá uma URL como:</li>
+                    </ul>
+                    <div class="code-block">android-cloud-runner-production.up.railway.app</div>
+
+                    <p style="margin-top: 15px;"><strong>Passo 6.3: Copiar URL</strong></p>
+                    <ul>
+                        <li>Copie essa URL</li>
+                        <li>Abra em seu navegador</li>
+                    </ul>
+
+                    <div class="success">
+                        ✓ Seu Android Cloud Runner está rodando na nuvem!<br>
+                        Agora você pode acessar de qualquer lugar!
+                    </div>
+                </div>
+            </div>
+
+            <div class="step">
+                <div class="step-header">
+                    <div class="step-number">7</div>
+                    <div class="step-title">Usar Remotamente</div>
+                </div>
+                <div class="step-content">
+                    <p><strong>Agora você pode:</strong></p>
+                    <ul>
+                        <li>✅ Acessar de qualquer computador</li>
+                        <li>✅ Acessar de qualquer smartphone</li>
+                        <li>✅ Acessar de qualquer tablet</li>
+                        <li>✅ Acessar de qualquer lugar do mundo</li>
+                        <li>✅ Compartilhar a URL com outras pessoas</li>
+                    </ul>
+
+                    <p style="margin-top: 15px;"><strong>Fluxo:</strong></p>
+                    <ul>
+                        <li>Abra a URL no navegador</li>
+                        <li>Faça upload do APK</li>
+                        <li>Instale o APK</li>
+                        <li>Teste seu app</li>
+                    </ul>
+
+                    <div class="info">
+                        ℹ️ Railway oferece 500 horas/mês grátis<br>
+                        Suficiente para usar 16+ horas por dia!
+                    </div>
+                </div>
+            </div>
+
+            <div class="checklist">
+                <h3>✅ Checklist - Railway Deploy</h3>
+                <div class="checklist-item">
+                    <input type="checkbox" id="rw1">
+                    <label for="rw1">Conta GitHub criada</label>
+                </div>
+                <div class="checklist-item">
+                    <input type="checkbox" id="rw2">
+                    <label for="rw2">Repositório criado</label>
+                </div>
+                <div class="checklist-item">
+                    <input type="checkbox" id="rw3">
+                    <label for="rw3">Código enviado para GitHub</label>
+                </div>
+                <div class="checklist-item">
+                    <input type="checkbox" id="rw4">
+                    <label for="rw4">Conta Railway criada</label>
+                </div>
+                <div class="checklist-item">
+                    <input type="checkbox" id="rw5">
+                    <label for="rw5">Deploy realizado</label>
+                </div>
+                <div class="checklist-item">
+                    <input type="checkbox" id="rw6">
+                    <label for="rw6">URL pública obtida</label>
+                </div>
+                <div class="checklist-item">
+                    <input type="checkbox" id="rw7">
+                    <label for="rw7">Acessou a URL no navegador</label>
+                </div>
+                <div class="checklist-item">
+                    <input type="checkbox" id="rw8">
+                    <label for="rw8">Interface carregada</label>
+                </div>
+                <div class="checklist-item">
+                    <input type="checkbox" id="rw9">
+                    <label for="rw9">Instalou um APK</label>
+                </div>
+                <div class="checklist-item">
+                    <input type="checkbox" id="rw10">
+                    <label for="rw10">Testou um app</label>
+                </div>
+            </div>
+        </div>
+
+        <div class="nav-buttons">
+            <button class="nav-btn prev" onclick="previousTab()" id="prevBtn">← Anterior</button>
+            <button class="nav-btn next" onclick="nextTab()" id="nextBtn">Próximo →</button>
+        </div>
+
+        <div class="footer">
+            <p>📱 Android Cloud Runner - Guia Completo e Detalhado</p>
+            <p>Versão Portátil (Sem Docker) - 100% Gratuito</p>
+        </div>
+    </div>
+
+    <script>
+        let currentTab = 0;
+        const tabs = ['tab0', 'tab1', 'tab2', 'tab3'];
+        const tabBtns = document.querySelectorAll('.tab-btn');
+
+        function switchTab(index) {
+            currentTab = index;
+            updateTabs();
+        }
+
+        function nextTab() {
+            if (currentTab < tabs.length - 1) {
+                currentTab++;
+                updateTabs();
+            }
+        }
+
+        function previousTab() {
+            if (currentTab > 0) {
+                currentTab--;
+                updateTabs();
+            }
+        }
+
+        function updateTabs() {
+            document.querySelectorAll('.content').forEach(el => el.classList.remove('active'));
+            document.getElementById(tabs[currentTab]).classList.add('active');
+
+            tabBtns.forEach((btn, idx) => {
+                btn.classList.toggle('active', idx === currentTab);
+            });
+
+            document.getElementById('prevBtn').disabled = currentTab === 0;
+            document.getElementById('nextBtn').disabled = currentTab === tabs.length - 1;
+
+            const progress = ((currentTab + 1) / tabs.length) * 100;
+            document.getElementById('progressFill').style.width = progress + '%';
+
+            window.scrollTo(0, 0);
+        }
+
+        // Expandable items
+        document.querySelectorAll('.expandable-header').forEach(header => {
+            header.addEventListener('click', function() {
+                const content = this.nextElementSibling;
+                const icon = this.querySelector('.expandable-icon');
+                content.classList.toggle('active');
+                icon.classList.toggle('active');
+            });
+        });
+
+        updateTabs();
+    </script>
+</body>
+</html>

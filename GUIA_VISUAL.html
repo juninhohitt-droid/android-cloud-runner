@@ -1,0 +1,878 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Guia Visual - Android Cloud Runner Portátil</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .header {
+            text-align: center;
+            color: white;
+            margin-bottom: 40px;
+        }
+
+        .header h1 {
+            font-size: 36px;
+            margin-bottom: 10px;
+        }
+
+        .header p {
+            font-size: 16px;
+            opacity: 0.9;
+        }
+
+        .tabs {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 30px;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .tab-btn {
+            padding: 12px 24px;
+            border: none;
+            border-radius: 8px;
+            background: white;
+            color: #667eea;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 14px;
+        }
+
+        .tab-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+        }
+
+        .tab-btn.active {
+            background: #667eea;
+            color: white;
+        }
+
+        .content {
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            display: none;
+        }
+
+        .content.active {
+            display: block;
+            animation: fadeIn 0.3s ease;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .step {
+            margin-bottom: 40px;
+            padding-bottom: 40px;
+            border-bottom: 2px solid #f0f0f0;
+        }
+
+        .step:last-child {
+            border-bottom: none;
+            margin-bottom: 0;
+            padding-bottom: 0;
+        }
+
+        .step-header {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .step-number {
+            width: 50px;
+            height: 50px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            font-weight: bold;
+            flex-shrink: 0;
+        }
+
+        .step-title {
+            font-size: 22px;
+            font-weight: 600;
+            color: #333;
+        }
+
+        .step-content {
+            margin-left: 65px;
+            background: #f9f9f9;
+            padding: 20px;
+            border-radius: 12px;
+            border-left: 4px solid #667eea;
+        }
+
+        .step-content p {
+            color: #666;
+            line-height: 1.8;
+            margin-bottom: 12px;
+        }
+
+        .step-content p:last-child {
+            margin-bottom: 0;
+        }
+
+        .code-block {
+            background: #2d2d2d;
+            color: #f8f8f2;
+            padding: 15px;
+            border-radius: 8px;
+            margin: 15px 0;
+            overflow-x: auto;
+            font-family: 'Courier New', monospace;
+            font-size: 13px;
+            line-height: 1.5;
+        }
+
+        .important {
+            background: #fff3cd;
+            border-left: 4px solid #ffc107;
+            padding: 15px;
+            border-radius: 8px;
+            margin: 15px 0;
+            color: #856404;
+        }
+
+        .success {
+            background: #d4edda;
+            border-left: 4px solid #28a745;
+            padding: 15px;
+            border-radius: 8px;
+            margin: 15px 0;
+            color: #155724;
+        }
+
+        .checklist {
+            background: #f0f0f0;
+            padding: 20px;
+            border-radius: 12px;
+            margin-top: 30px;
+        }
+
+        .checklist h3 {
+            margin-bottom: 15px;
+            color: #333;
+        }
+
+        .checklist-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 10px;
+            cursor: pointer;
+            padding: 8px;
+            border-radius: 6px;
+            transition: background 0.2s ease;
+        }
+
+        .checklist-item:hover {
+            background: #e0e0e0;
+        }
+
+        .checklist-item input[type="checkbox"] {
+            width: 18px;
+            height: 18px;
+            cursor: pointer;
+        }
+
+        .checklist-item label {
+            cursor: pointer;
+            flex: 1;
+            color: #666;
+        }
+
+        .checklist-item input[type="checkbox"]:checked + label {
+            color: #28a745;
+            text-decoration: line-through;
+        }
+
+        .nav-buttons {
+            display: flex;
+            gap: 15px;
+            margin-top: 40px;
+            justify-content: center;
+        }
+
+        button.nav-btn {
+            padding: 12px 30px;
+            border: none;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 14px;
+        }
+
+        button.prev {
+            background: #e0e0e0;
+            color: #333;
+        }
+
+        button.prev:hover:not(:disabled) {
+            background: #d0d0d0;
+        }
+
+        button.next {
+            background: #667eea;
+            color: white;
+        }
+
+        button.next:hover:not(:disabled) {
+            background: #5568d3;
+            transform: translateY(-2px);
+        }
+
+        button:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .footer {
+            text-align: center;
+            color: white;
+            margin-top: 40px;
+            font-size: 14px;
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 6px;
+            background: rgba(255, 255, 255, 0.3);
+            border-radius: 3px;
+            margin-bottom: 20px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: white;
+            width: 0%;
+            transition: width 0.3s ease;
+        }
+
+        .os-selector {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+
+        .os-btn {
+            padding: 10px 20px;
+            border: 2px solid #ddd;
+            background: white;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: 500;
+        }
+
+        .os-btn.active {
+            border-color: #667eea;
+            background: #667eea;
+            color: white;
+        }
+
+        .os-content {
+            display: none;
+        }
+
+        .os-content.active {
+            display: block;
+        }
+
+        @media (max-width: 768px) {
+            .header h1 {
+                font-size: 24px;
+            }
+
+            .content {
+                padding: 20px;
+            }
+
+            .step-header {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            .step-content {
+                margin-left: 0;
+            }
+
+            .tabs {
+                flex-direction: column;
+            }
+
+            .tab-btn {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="progress-bar">
+            <div class="progress-fill" id="progressFill"></div>
+        </div>
+
+        <div class="header">
+            <h1>📱 Guia Visual - Android Cloud Runner</h1>
+            <p>Versão Portátil (Sem Docker) - Passo a Passo Interativo</p>
+        </div>
+
+        <div class="tabs">
+            <button class="tab-btn active" onclick="switchTab(0)">📋 Visão Geral</button>
+            <button class="tab-btn" onclick="switchTab(1)">🪟 Windows</button>
+            <button class="tab-btn" onclick="switchTab(2)">🍎 Mac</button>
+            <button class="tab-btn" onclick="switchTab(3)">🐧 Linux</button>
+            <button class="tab-btn" onclick="switchTab(4)">☁️ Nuvem (Railway)</button>
+        </div>
+
+        <!-- TAB 0: Visão Geral -->
+        <div class="content active" id="tab0">
+            <h2>📋 Visão Geral</h2>
+
+            <div class="step">
+                <div class="step-header">
+                    <div class="step-number">?</div>
+                    <div class="step-title">O que é Android Cloud Runner?</div>
+                </div>
+                <div class="step-content">
+                    <p><strong>Android Cloud Runner</strong> é uma solução portátil que permite rodar seu APK em um Android real, sem Docker, sem limitações.</p>
+                    <p>Você pode usar localmente no seu computador ou fazer deploy na nuvem (Railway) para acessar de qualquer lugar.</p>
+                </div>
+            </div>
+
+            <div class="step">
+                <div class="step-header">
+                    <div class="step-number">✨</div>
+                    <div class="step-title">Características</div>
+                </div>
+                <div class="step-content">
+                    <p>✅ <strong>Sem Docker</strong> — Funciona em Windows 10 antigo</p>
+                    <p>✅ <strong>Portátil</strong> — Leve e fácil de usar</p>
+                    <p>✅ <strong>Android Real</strong> — Não é simulação</p>
+                    <p>✅ <strong>Interface Web</strong> — Acesse via navegador</p>
+                    <p>✅ <strong>Acesso Remoto</strong> — Railway gratuito</p>
+                    <p>✅ <strong>100% Gratuito</strong> — Open-source</p>
+                </div>
+            </div>
+
+            <div class="step">
+                <div class="step-header">
+                    <div class="step-number">⏱️</div>
+                    <div class="step-title">Tempo Estimado</div>
+                </div>
+                <div class="step-content">
+                    <p><strong>Primeira vez:</strong> 30-45 minutos</p>
+                    <p><strong>Próximas vezes:</strong> 5 minutos (apenas executar START.bat)</p>
+                </div>
+            </div>
+
+            <div class="step">
+                <div class="step-header">
+                    <div class="step-number">🚀</div>
+                    <div class="step-title">Próximos Passos</div>
+                </div>
+                <div class="step-content">
+                    <p>Selecione seu sistema operacional acima (Windows, Mac ou Linux) e siga o guia passo a passo!</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- TAB 1: Windows -->
+        <div class="content" id="tab1">
+            <h2>🪟 Guia para Windows</h2>
+
+            <div class="step">
+                <div class="step-header">
+                    <div class="step-number">1</div>
+                    <div class="step-title">Instalar Python</div>
+                </div>
+                <div class="step-content">
+                    <p>1. Abra <strong>https://www.python.org/downloads/</strong></p>
+                    <p>2. Clique no botão amarelo <strong>"Download Python 3.x.x"</strong></p>
+                    <p>3. Execute o instalador</p>
+                    <div class="important">
+                        <strong>⚠️ IMPORTANTE:</strong> Marque a caixa <strong>"Add Python to PATH"</strong> durante a instalação!
+                    </div>
+                    <p>4. Clique em <strong>"Install Now"</strong></p>
+                    <p>5. <strong>Reinicie o computador</strong></p>
+                </div>
+            </div>
+
+            <div class="step">
+                <div class="step-header">
+                    <div class="step-number">2</div>
+                    <div class="step-title">Instalar Android Studio</div>
+                </div>
+                <div class="step-content">
+                    <p>1. Abra <strong>https://developer.android.com/studio</strong></p>
+                    <p>2. Clique em <strong>"Download Android Studio"</strong></p>
+                    <p>3. Execute o instalador</p>
+                    <p>4. Siga as instruções de instalação</p>
+                </div>
+            </div>
+
+            <div class="step">
+                <div class="step-header">
+                    <div class="step-number">3</div>
+                    <div class="step-title">Criar Emulador Android</div>
+                </div>
+                <div class="step-content">
+                    <p>1. Abra <strong>Android Studio</strong></p>
+                    <p>2. Vá para <strong>Tools → Device Manager</strong></p>
+                    <p>3. Clique em <strong>"Create device"</strong></p>
+                    <p>4. Selecione um modelo (ex: Pixel 5)</p>
+                    <p>5. Clique em <strong>"Next"</strong></p>
+                    <p>6. Selecione uma versão do Android (ex: Android 13)</p>
+                    <p>7. Clique em <strong>"Finish"</strong></p>
+                </div>
+            </div>
+
+            <div class="step">
+                <div class="step-header">
+                    <div class="step-number">4</div>
+                    <div class="step-title">Descompactar o ZIP</div>
+                </div>
+                <div class="step-content">
+                    <p>1. Localize o arquivo <strong>android-cloud-runner-portable.zip</strong></p>
+                    <p>2. Clique direito e selecione <strong>"Extract All..."</strong></p>
+                    <p>3. Escolha um local (ex: Desktop ou Documents)</p>
+                    <p>4. Clique em <strong>"Extract"</strong></p>
+                </div>
+            </div>
+
+            <div class="step">
+                <div class="step-header">
+                    <div class="step-number">5</div>
+                    <div class="step-title">Abrir Terminal na Pasta</div>
+                </div>
+                <div class="step-content">
+                    <p>1. Abra a pasta <strong>android-cloud-runner-portable</strong></p>
+                    <p>2. Clique direito em um espaço vazio</p>
+                    <p>3. Selecione <strong>"Open PowerShell here"</strong></p>
+                </div>
+            </div>
+
+            <div class="step">
+                <div class="step-header">
+                    <div class="step-number">6</div>
+                    <div class="step-title">Executar START.bat</div>
+                </div>
+                <div class="step-content">
+                    <p>Na janela do PowerShell, digite:</p>
+                    <div class="code-block">START.bat</div>
+                    <p>Pressione <strong>Enter</strong></p>
+                    <p>Aguarde as mensagens:</p>
+                    <div class="success">
+                        ✓ Python encontrado<br>
+                        ✓ pip encontrado<br>
+                        📦 Instalando dependências...<br>
+                        ✓ Dependências instaladas<br>
+                        🚀 Iniciando Android Cloud Runner...<br>
+                        📱 Acesse: http://localhost:5000
+                    </div>
+                </div>
+            </div>
+
+            <div class="step">
+                <div class="step-header">
+                    <div class="step-number">7</div>
+                    <div class="step-title">Abrir no Navegador</div>
+                </div>
+                <div class="step-content">
+                    <p>1. Abra seu navegador (Chrome, Firefox, Edge, Safari)</p>
+                    <p>2. Na barra de endereço, digite:</p>
+                    <div class="code-block">http://localhost:5000</div>
+                    <p>3. Pressione <strong>Enter</strong></p>
+                    <p>4. Você verá a interface do Android Cloud Runner!</p>
+                </div>
+            </div>
+
+            <div class="checklist">
+                <h3>✅ Checklist de Conclusão</h3>
+                <div class="checklist-item">
+                    <input type="checkbox" id="w1">
+                    <label for="w1">Python instalado com "Add Python to PATH"</label>
+                </div>
+                <div class="checklist-item">
+                    <input type="checkbox" id="w2">
+                    <label for="w2">Android Studio instalado</label>
+                </div>
+                <div class="checklist-item">
+                    <input type="checkbox" id="w3">
+                    <label for="w3">Emulador Android criado</label>
+                </div>
+                <div class="checklist-item">
+                    <input type="checkbox" id="w4">
+                    <label for="w4">ZIP descompactado</label>
+                </div>
+                <div class="checklist-item">
+                    <input type="checkbox" id="w5">
+                    <label for="w5">Terminal aberto na pasta</label>
+                </div>
+                <div class="checklist-item">
+                    <input type="checkbox" id="w6">
+                    <label for="w6">START.bat executado</label>
+                </div>
+                <div class="checklist-item">
+                    <input type="checkbox" id="w7">
+                    <label for="w7">Dependências instaladas</label>
+                </div>
+                <div class="checklist-item">
+                    <input type="checkbox" id="w8">
+                    <label for="w8">Aplicação rodando (http://localhost:5000)</label>
+                </div>
+                <div class="checklist-item">
+                    <input type="checkbox" id="w9">
+                    <label for="w9">Interface web carregada</label>
+                </div>
+            </div>
+        </div>
+
+        <!-- TAB 2: Mac -->
+        <div class="content" id="tab2">
+            <h2>🍎 Guia para Mac</h2>
+
+            <div class="step">
+                <div class="step-header">
+                    <div class="step-number">1</div>
+                    <div class="step-title">Instalar Homebrew</div>
+                </div>
+                <div class="step-content">
+                    <p>Abra Terminal e digite:</p>
+                    <div class="code-block">/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"</div>
+                </div>
+            </div>
+
+            <div class="step">
+                <div class="step-header">
+                    <div class="step-number">2</div>
+                    <div class="step-title">Instalar Python</div>
+                </div>
+                <div class="step-content">
+                    <p>No Terminal, digite:</p>
+                    <div class="code-block">brew install python3</div>
+                </div>
+            </div>
+
+            <div class="step">
+                <div class="step-header">
+                    <div class="step-number">3</div>
+                    <div class="step-title">Instalar Android Studio</div>
+                </div>
+                <div class="step-content">
+                    <p>1. Abra <strong>https://developer.android.com/studio</strong></p>
+                    <p>2. Clique em <strong>"Download Android Studio"</strong></p>
+                    <p>3. Ou use Homebrew:</p>
+                    <div class="code-block">brew install android-studio</div>
+                </div>
+            </div>
+
+            <div class="step">
+                <div class="step-header">
+                    <div class="step-number">4</div>
+                    <div class="step-title">Criar Emulador Android</div>
+                </div>
+                <div class="step-content">
+                    <p>1. Abra <strong>Android Studio</strong></p>
+                    <p>2. Vá para <strong>Tools → Device Manager</strong></p>
+                    <p>3. Clique em <strong>"Create device"</strong></p>
+                    <p>4. Siga as instruções</p>
+                </div>
+            </div>
+
+            <div class="step">
+                <div class="step-header">
+                    <div class="step-number">5</div>
+                    <div class="step-title">Descompactar e Executar</div>
+                </div>
+                <div class="step-content">
+                    <p>1. Descompacte o ZIP</p>
+                    <p>2. Abra Terminal na pasta:</p>
+                    <div class="code-block">cd ~/Downloads/android-cloud-runner-portable</div>
+                    <p>3. Digite:</p>
+                    <div class="code-block">chmod +x start.sh
+./start.sh</div>
+                    <p>4. Aguarde a inicialização</p>
+                </div>
+            </div>
+
+            <div class="step">
+                <div class="step-header">
+                    <div class="step-number">6</div>
+                    <div class="step-title">Abrir no Navegador</div>
+                </div>
+                <div class="step-content">
+                    <p>Quando ver a mensagem:</p>
+                    <div class="success">📱 Acesse: http://localhost:5000</div>
+                    <p>Abra seu navegador e digite:</p>
+                    <div class="code-block">http://localhost:5000</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- TAB 3: Linux -->
+        <div class="content" id="tab3">
+            <h2>🐧 Guia para Linux</h2>
+
+            <div class="step">
+                <div class="step-header">
+                    <div class="step-number">1</div>
+                    <div class="step-title">Instalar Python</div>
+                </div>
+                <div class="step-content">
+                    <p>Abra Terminal e digite:</p>
+                    <div class="code-block">sudo apt-get update
+sudo apt-get install python3 python3-pip</div>
+                </div>
+            </div>
+
+            <div class="step">
+                <div class="step-header">
+                    <div class="step-number">2</div>
+                    <div class="step-title">Instalar Android Studio</div>
+                </div>
+                <div class="step-content">
+                    <p>1. Abra <strong>https://developer.android.com/studio</strong></p>
+                    <p>2. Baixe a versão para Linux</p>
+                    <p>3. Descompacte e execute</p>
+                </div>
+            </div>
+
+            <div class="step">
+                <div class="step-header">
+                    <div class="step-number">3</div>
+                    <div class="step-title">Criar Emulador Android</div>
+                </div>
+                <div class="step-content">
+                    <p>1. Abra <strong>Android Studio</strong></p>
+                    <p>2. Vá para <strong>Tools → Device Manager</strong></p>
+                    <p>3. Clique em <strong>"Create device"</strong></p>
+                    <p>4. Siga as instruções</p>
+                </div>
+            </div>
+
+            <div class="step">
+                <div class="step-header">
+                    <div class="step-number">4</div>
+                    <div class="step-title">Descompactar e Executar</div>
+                </div>
+                <div class="step-content">
+                    <p>1. Descompacte o ZIP</p>
+                    <p>2. Abra Terminal na pasta:</p>
+                    <div class="code-block">cd ~/Downloads/android-cloud-runner-portable</div>
+                    <p>3. Digite:</p>
+                    <div class="code-block">chmod +x start.sh
+./start.sh</div>
+                    <p>4. Aguarde a inicialização</p>
+                </div>
+            </div>
+
+            <div class="step">
+                <div class="step-header">
+                    <div class="step-number">5</div>
+                    <div class="step-title">Abrir no Navegador</div>
+                </div>
+                <div class="step-content">
+                    <p>Quando ver a mensagem:</p>
+                    <div class="success">📱 Acesse: http://localhost:5000</div>
+                    <p>Abra seu navegador e digite:</p>
+                    <div class="code-block">http://localhost:5000</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- TAB 4: Railway -->
+        <div class="content" id="tab4">
+            <h2>☁️ Deploy no Railway (Acesso Remoto Gratuito)</h2>
+
+            <div class="step">
+                <div class="step-header">
+                    <div class="step-number">1</div>
+                    <div class="step-title">Criar Conta GitHub</div>
+                </div>
+                <div class="step-content">
+                    <p>1. Abra <strong>https://github.com/signup</strong></p>
+                    <p>2. Preencha os dados</p>
+                    <p>3. Confirme o email</p>
+                </div>
+            </div>
+
+            <div class="step">
+                <div class="step-header">
+                    <div class="step-number">2</div>
+                    <div class="step-title">Criar Repositório</div>
+                </div>
+                <div class="step-content">
+                    <p>1. Faça login no GitHub</p>
+                    <p>2. Clique no ícone "+" → "New repository"</p>
+                    <p>3. Nome: <strong>android-cloud-runner</strong></p>
+                    <p>4. Marque "Public"</p>
+                    <p>5. Clique em "Create repository"</p>
+                </div>
+            </div>
+
+            <div class="step">
+                <div class="step-header">
+                    <div class="step-number">3</div>
+                    <div class="step-title">Fazer Upload para GitHub</div>
+                </div>
+                <div class="step-content">
+                    <p>Abra Terminal na pasta e digite:</p>
+                    <div class="code-block">git init
+git add .
+git commit -m "Initial commit"
+git remote add origin https://github.com/SeuUsuario/android-cloud-runner.git
+git branch -M main
+git push -u origin main</div>
+                </div>
+            </div>
+
+            <div class="step">
+                <div class="step-header">
+                    <div class="step-number">4</div>
+                    <div class="step-title">Criar Conta Railway</div>
+                </div>
+                <div class="step-content">
+                    <p>1. Abra <strong>https://railway.app</strong></p>
+                    <p>2. Clique em "Login"</p>
+                    <p>3. Selecione "Login with GitHub"</p>
+                    <p>4. Autorize Railway</p>
+                </div>
+            </div>
+
+            <div class="step">
+                <div class="step-header">
+                    <div class="step-number">5</div>
+                    <div class="step-title">Fazer Deploy</div>
+                </div>
+                <div class="step-content">
+                    <p>1. No painel do Railway, clique em "New Project"</p>
+                    <p>2. Selecione "Deploy from GitHub repo"</p>
+                    <p>3. Selecione seu repositório</p>
+                    <p>4. Clique em "Deploy"</p>
+                    <p>5. Aguarde 3-5 minutos</p>
+                </div>
+            </div>
+
+            <div class="step">
+                <div class="step-header">
+                    <div class="step-number">6</div>
+                    <div class="step-title">Obter URL Pública</div>
+                </div>
+                <div class="step-content">
+                    <p>1. No painel do Railway, vá para "Settings"</p>
+                    <p>2. Procure por "Domains"</p>
+                    <p>3. Você verá uma URL como:</p>
+                    <div class="code-block">android-cloud-runner-production.up.railway.app</div>
+                    <p>4. Abra no navegador para acessar remotamente!</p>
+                </div>
+            </div>
+
+            <div class="important">
+                <strong>💡 Dica:</strong> Railway oferece 500 horas/mês grátis. Suficiente para usar 16+ horas por dia!
+            </div>
+        </div>
+
+        <div class="nav-buttons">
+            <button class="nav-btn prev" onclick="previousTab()" id="prevBtn">← Anterior</button>
+            <button class="nav-btn next" onclick="nextTab()" id="nextBtn">Próximo →</button>
+        </div>
+
+        <div class="footer">
+            <p>📱 Android Cloud Runner - Guia Visual Interativo</p>
+            <p>Versão Portátil (Sem Docker) - 100% Gratuito</p>
+        </div>
+    </div>
+
+    <script>
+        let currentTab = 0;
+        const tabs = ['tab0', 'tab1', 'tab2', 'tab3', 'tab4'];
+        const tabBtns = document.querySelectorAll('.tab-btn');
+
+        function switchTab(index) {
+            currentTab = index;
+            updateTabs();
+        }
+
+        function nextTab() {
+            if (currentTab < tabs.length - 1) {
+                currentTab++;
+                updateTabs();
+            }
+        }
+
+        function previousTab() {
+            if (currentTab > 0) {
+                currentTab--;
+                updateTabs();
+            }
+        }
+
+        function updateTabs() {
+            // Atualizar conteúdo
+            document.querySelectorAll('.content').forEach(el => el.classList.remove('active'));
+            document.getElementById(tabs[currentTab]).classList.add('active');
+
+            // Atualizar botões de abas
+            tabBtns.forEach((btn, idx) => {
+                btn.classList.toggle('active', idx === currentTab);
+            });
+
+            // Atualizar botões de navegação
+            document.getElementById('prevBtn').disabled = currentTab === 0;
+            document.getElementById('nextBtn').disabled = currentTab === tabs.length - 1;
+
+            // Atualizar barra de progresso
+            const progress = ((currentTab + 1) / tabs.length) * 100;
+            document.getElementById('progressFill').style.width = progress + '%';
+
+            // Scroll para o topo
+            window.scrollTo(0, 0);
+        }
+
+        // Inicializar
+        updateTabs();
+    </script>
+</body>
+</html>
